@@ -1,5 +1,22 @@
 import { convexAuth } from "@convex-dev/auth/server";
+import GitHub from "@auth/core/providers/github";
+import Google from "@auth/core/providers/google";
+import { Password } from "@convex-dev/auth/providers/Password";
+import { DataModel } from "./_generated/dataModel";
+
+const CustomPassword = Password<DataModel>({
+  profile(params) {
+    return {
+      email: params.email as string,
+      name: params.name as string,
+    };
+  },
+});
+
+/**
+ * Added custom password becz , while sign-in with password provider we don't actually passing name , so we customised the password provider via docs
+*/
 
 export const { auth, signIn, signOut, store } = convexAuth({
-  providers: [],
+  providers: [CustomPassword, Password, GitHub, Google],
 });
